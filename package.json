@@ -1,0 +1,64 @@
+{
+  "name": "codex-usage-statusbar",
+  "displayName": "Codex Usage Statusbar",
+  "description": "在 VSCode 状态栏实时显示 Codex 5小时窗/周配额剩余与重置倒计时",
+  "version": "0.1.0",
+  "publisher": "local",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "codexUsage.refresh",
+        "title": "Codex Usage: 刷新配额"
+      },
+      {
+        "command": "codexUsage.useResetCard",
+        "title": "Codex Usage: 使用重置卡"
+      }
+    ],
+    "configuration": {
+      "title": "Codex Usage",
+      "properties": {
+        "codexUsage.refreshInterval": {
+          "type": "number",
+          "default": 60,
+          "minimum": 30,
+          "maximum": 600,
+          "description": "配额自动刷新间隔（秒），窗口失焦时暂停轮询"
+        },
+        "codexUsage.displayFormat": {
+          "type": "string",
+          "default": "5h {5h} 周 {week} 重置 {reset}",
+          "description": "状态栏显示格式，占位符：{5h} 5小时窗剩余百分比、{week} 周配额剩余百分比、{reset} 重置倒计时"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc --noEmit && esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --target=node18",
+    "watch": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --target=node18 --watch",
+    "lint": "tsc --noEmit",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.0.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.6.0"
+  },
+  "dependencies": {
+    "undici": "^8.11.2"
+  }
+}
